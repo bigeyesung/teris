@@ -29,7 +29,7 @@ class Grid:
             if xy_seen.get(x)==None:
                 xy_seen[x]=y
             else:
-                xy_seen[x]=max(y,xy_seen[x]) ##!!!!change to numpy?
+                xy_seen[x]=max(y,xy_seen[x]) 
         #for each x: select the top y
         for x in xy_seen:
             top_x=x

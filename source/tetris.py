@@ -3,7 +3,6 @@ import numpy as np
 
 class Tetris:
     def __init__(self):
-        self.self_height=0
         self.brick_all=[]
 
     def set_height(self, line):
@@ -18,11 +17,6 @@ class Tetris:
         self.brick_all.append(brick)
 
     def brick_is_available(self, grid_maker, brick):
-        #if all cell is empty and within the grid
-        #for each brick:
-        #   lowest pt(s) is available, if not goes up until highest hit the max height
-        #   highest pt(s) go up is available
-        #   mid pt(s) is available
         brick_y=max(brick[:,1])
         grid_width=len(grid_maker.grid)-1
         grid_height=len(grid_maker.grid[0])-1
@@ -64,7 +58,7 @@ class Tetris:
             if xy_seen.get(x)==None:
                 xy_seen[x]=y
             else:
-                xy_seen[x]=min(y,xy_seen[x]) ##!!!!change to numpy?
+                xy_seen[x]=min(y,xy_seen[x]) 
         min_move=size
         for x in xy_seen:
             x_bottom=x
