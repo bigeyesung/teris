@@ -35,7 +35,7 @@
 # 4-4.run test
 ### $ python tests/sample_test.py
 
-##don consider empty file input, as this is not valid
+
 
 # 5.Components
 ### 5-1.Tetris class: Mainly to working with game related tasks. Some key functions listed below.
@@ -74,3 +74,5 @@
 # tests/output_answer.txt: test data answer I provided
 # tests/custom_input.txt:  custom test data I provided
 # tests/custom_output.txt: custom test answer I provided
+# tests/empty.txt:  empty test data I provided
+# tests/empty_answer.txt: empty test answer I provided
