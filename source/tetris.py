@@ -17,7 +17,7 @@ class Tetris:
     def add_brick(self,brick):
         self.brick_all.append(brick)
 
-    def is_available(self, grid_maker, brick):
+    def brick_is_available(self, grid_maker, brick):
         #if all cell is empty and within the grid
         #for each brick:
         #   lowest pt(s) is available, if not goes up until highest hit the max height
@@ -53,6 +53,10 @@ class Tetris:
             for x,y in brick:
                 grid_maker.grid[x][y]=True
 
+    def reset_grid(self, brick, grid_maker, loc_flag):
+        for x,y in brick:
+            grid_maker.grid[x][y]=loc_flag
+
     def update_brick_move(self, brick, grid_maker):
         size=len(grid_maker.grid[0])
         xy_seen={}
@@ -74,7 +78,11 @@ class Tetris:
                     move=y_bottom-search_ind
                     break
             min_move=min(min_move,move)
+        if min_move!=0:
+            self.reset_grid(brick, grid_maker, False)
         brick[:,1]-=min_move
+        if min_move!=0:
+            self.reset_grid(brick, grid_maker, True)
         return brick
 
     def update_all_bricks(self, col_counter, grid_maker):
@@ -82,18 +90,18 @@ class Tetris:
         update_bricks=[]
         for brick in self.brick_all:
             if col_counter not in brick[:,1]:
-                #check if brick goes down as well.
-                brick=self.update_brick_move(brick,grid_maker)
-
-                update_bricks.append(brick)
-                continue
-            #update brick shape
-            mask=np.where(brick[:,1]==col_counter,False,True)
-            brick=brick[mask]
-            #update brick location(going down)
-            if brick.shape[0]!=0:
+                #check if any brick above goes down as well.
                 brick=self.update_brick_move(brick,grid_maker)
                 update_bricks.append(brick)
+                
+            else:
+                #update brick shape
+                mask=np.where(brick[:,1]==col_counter,False,True)
+                brick=brick[mask]
+                #update brick location(going down)
+                if brick.shape[0]!=0:
+                    brick=self.update_brick_move(brick,grid_maker)
+                    update_bricks.append(brick)
         self.brick_all=update_bricks
 
     def check_full_row(self, grid_maker, brick):
@@ -102,32 +110,22 @@ class Tetris:
         while(col_counter!=size):
             #if all cell are full
             if np.all(grid_maker.grid[:,col_counter]):
-                #update brick to new shape
-                # mask=np.where(brick[:,1]==col_counter,False,True)
-                # brick=brick[mask]
-                #update grid
+                #clear full cells in grid
                 grid_maker.grid[:,col_counter]=False
-                #update the rest brick
+                #update whole bricks
                 self.update_all_bricks(col_counter, grid_maker)
                 #update grid based on new brick locations
                 self.update_grid(grid_maker)
-                #move grid(starting from current col)
-                # for col1 in range(col_counter, size):
-                #     if col1!=size-1:
-                #         grid_maker.grid[:,col1]=grid_maker.grid[:,(col1+1)%size]
-                #     else:
-                #         grid_maker.grid[:,col1]=False
-               
                 #reset counter=0
                 col_counter=0
             else:
                 col_counter+=1
         
     
-    def get_brick(self,pattern): #I0
+    def get_brick(self, pattern): 
         letter, pos= pattern[0],int(pattern[1])
         #starting from left, down
-        if letter=='Q': #cube
+        if letter=='Q': 
             return np.array([[pos+0,0],[pos+1,0],[pos+0,1],[pos+1,1]])
         if letter=='Z': 
             pos+=1 #right shift one step
