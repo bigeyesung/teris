@@ -65,18 +65,18 @@ def main():
     #     results.append(result)
         
     ## if run exe
-    # with open('output.txt', 'w') as sys.stdout:
-    #     if len(results)==0:
-    #         print(0)
-    #     else:
-    #         for result in results:
-    #             print(result)
+    with open('output.txt', 'w') as sys.stdout:
+        if len(results)==0:
+            print(0)
+        else:
+            for result in results:
+                print(result)
     ## if run test
-    if len(results)==0:
-        print(0)
-    else:
-        for result in results:
-            print(result)
+    # if len(results)==0:
+    #     print(0)
+    # else:
+    #     for result in results:
+    #         print(result)
 
 if __name__=="__main__":
     main()

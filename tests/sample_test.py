@@ -38,11 +38,11 @@ def run_test(test_case: TestCase):
 
 if __name__ == "__main__":
     test_cases = [
-        TestCase("simple test", b"Q0", 2),
+        TestCase("simple test1", b"Q0", 2),
         TestCase("Many blocks test", ",".join(["Q0"] * 50).encode("utf-8"), 100),
-        TestCase("simple test", ",".join(["I0","I4","Q8"]).encode("utf-8"), 1),
-        TestCase("simple test", ",".join(["T0","T3","I6","I6"]).encode("utf-8"), 1),
-        TestCase("simple test", ",".join(["L0","J3","L5","J8","T1"]).encode("utf-8"), 3)
+        TestCase("test2", ",".join(["I0","I4","Q8"]).encode("utf-8"), 1),
+        TestCase("test3", ",".join(["T0","T3","I6","I6"]).encode("utf-8"), 1),
+        TestCase("test4", ",".join(["L0","J3","L5","J8","T1"]).encode("utf-8"), 3)
     ]
     for test_case in test_cases:
         run_test(test_case)

@@ -30,7 +30,7 @@
 ### $ pyinstaller -n tetris_test main.py
 
 # 4-3.run exe, generate output.txt
-### $ ./dist/tetris_game/tetris_game < input.txt > output.txt
+### $ ./dist/tetris_game/tetris_game < tests/input.txt > output.txt
 
 # 4-4.run test
 ### $ python tests/sample_test.py
