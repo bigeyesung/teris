@@ -1,152 +1,76 @@
-# Tetris programming challenge
+# 1.concept
+# iterate whole bricks:
+#   for each brick:
+#    check if it's location and above to the ceiling is empty:
+#     if it is->put it in the location
+#     if not: continue to move up 1 step(+y) to find empty space
+#    Once brick is put, checking if current row is full or not
+#     if full->clear that row, reshape all collided bricks, make sure all bricks go to their new locations or stay.
+# once loop is done, calculate the maximum height and return 
 
-## Instructions
+# 2.coordinate in my tetris(checking images/fig1.png as an example)
+## X:left to right
+## Y:bottom to up
 
-1. Create a private github repository based on [this template](https://github.com/encord-team/backend-assignment), either on github.com or using the [Github CLI](https://cli.github.com/):
+# 3.Input/Output data:
+### input:each line data
+### output: height for each line
 
-   ```
-   gh repo create encord-be-assignment --clone --private --template encord-team/backend-assignment
-   ```
+# 4.How to run code
+### 4-0 env setting
+### $ conda create -n encord python=3.8
+### $ pip install -r requirement.txt
 
-1. Write a solution to the challenge described below. Your program will be invoked from a command line, taking its input from STDIN and writing its output to STDOUT:
+### 4-1.build exe
+### keep L68-L73, comment out L75-L79 in main.py
+### $ pyinstaller -n tetris_game main.py
 
-   ```bash
-   $ ./tetris < input.txt > output.txt
-   ```
+# 4-2. build test exe
+### comment out L68-L73, keep L75-L79 in main.py
+### $ pyinstaller -n tetris_test main.py
 
-1. Once you are finished, compress your solution and send it by email to engineering-interviewers@encord.com.
+# 4-3.run exe, generate output.txt
+### $ ./dist/tetris_game/tetris_game < input.txt > output.txt
 
-## Problem description
+# 4-4.run test
+### $ python tests/sample_test.py
 
-You are to write a simplified Tetris engine.
-The engine should model a grid that pieces enter from top and come to rest at the bottom, as if pulled down by gravity. Each piece is made up of four unit squares.
-No two unit squares can occupy the same space in the grid at the same time.
-The pieces are rigid, and come to rest as soon as any part of a piece contacts the bottom of the grid or any resting block. As in Tetris, whenever an entire row of the grid is filled, it disappears, and any higher rows drop into the vacated space without any change to the internal pattern of blocks in any row.
-Your program must process a text file of lines each representing a sequence of pieces entering the grid.
-For each line of the input file, your program should output the resulting height of the remaining blocks within the grid.
-The file denotes the different possible shapes by letter. The letters used are Q, Z, S, T, I, L, and J. The shapes of the pieces they represent are shown in the table below:
+##don consider empty file input, as this is not valid
 
-</td>
-</tr>
-</table>
-<table>
-  <tr>
-    <td>Letter</td>
-    <td>Q</td>
-    <td>Z</td>
-    <td>S</td>
-    <td>T</td>
-    <td>I</td>
-    <td>L</td>
-    <td>J</td>
-  </tr>
-  <tr>
-    <td>Shape</td>
-    <td>
-      <pre>
-##
-##
-      </pre>
-    </td>
-    <td>
-      <pre>
-##
- ##
-      </pre>
-    </td>
-    <td>
-      <pre>
- ##
-##
-      </pre>
-    </td>
-    <td>
-      <pre>
-###
- #
-      </pre>
-    </td>
-    <td>
-      <pre>
-####
-      </pre>
-    </td>
-    <td>
-      <pre>
-#
-#
-##
-      </pre>
-    </td>
-    <td>
-      <pre>
- #
- #
-##
-      </pre>
-    </td>
-  </tr>
-</table>
+# 5.Components
+### 5-1.Tetris class: Mainly to working with game related tasks. Some key functions listed below.
+### brick_is_available(): checking cells corresponding to brick are empty and on top of it is also empty.
+### update_brick_move(): if brick is not stacked on other bricks, then it should go down(by gravity)
+### update_all_bricks(): updating all bricks movement
+### check_full_row(): checking if any row of grid is full, if it is then clear that row, and update corresponding bricks to move.
 
-Your program does not need to validate its input and can assume that there will be no illegal characters
-You do not have to account for shape rotation in your model. The pieces will always have the orientations shown above.
-Each line of the input file is a comma-separated list.
-Each entry in the list is a single letter (from the set above) and a single-digit integer. The integer represents the left-most column of the grid that the shape occupies, starting from zero.
-The grid of the game space is 10 units wide. For each line of the file, the grid’s initial state is empty.
+# 5-2.Grid class: Mainly to dealing with grid(Width*Height) data.
+### check_brick_in_grid():checking current brick is in valid grid location
+### check_brick_in_empty_cell():checking current brick is in empty grid location
+### check_brick_top_isempty():checking current brick on top is all empty grid location.
 
-For example, if the input file consisted of the line “Q0” the corresponding line in the output file would be “2”, since the block will drop to the bottom of the initially empty grid and has height two.
+# 5-3.draw: visual check 
 
-## Examples
+# 6.Analysis
+# 6-1.Time complexity: assuming for each line we have L possible bricks to try, each brick has 4 cell, and the grid size is M*N(width*height),Each brick needs to go through the grid,
+### and for each brick cell it needs to check/move horizontally and vertically(M+N).
+### The approximately time complexity is O(L*MN*4*(M+N)) 
 
-### Example 1
+# 6-2.Space complexity: 
+### Assuming we have L possible bricks to try, and we have grid size M*N, and we have 4*L brick cells.
+### The space complexity is O(MN+4L)
 
-A line in the input file contains `I0,I4,Q8` resulting in the following configuration:
+# 7.Improvement and future work:
+# 7-1.[brick] 
+### Currently for each brick, I go through each cell in a loop to do functions. Given index is provided already, it should use its index directly as parallel doing all cells at one time to save computation. 
 
-```
-  I0 │          │ I4  │          │ Q8  │          │
-     │          │ ──► │          │ ──► │        ##│
-     │####      │     │########  │     │##########│
-     └──────────┘     └──────────┘     └──────────┘
-      0123456789       0123456789       0123456789
+# 7-3.[Algorithm] 
+### In general rule of thumb, current algorithm is that for each brick to find empty space. In terms of scalibility, I think it can be improved. One potential solution is to use multi-processing more(which I have use in one place) or distributed system to accelerate game.
+### The other idea is to use collision approach, one thing I would like to try is to use "AABB" tree collision. It is used for 2D space traversal. If we have many bricks and large tetris game, searching location would also be time-consuming. So better use other tree/ data scructures to help program run faster.
 
-```
 
-The filled bottom row then disappears:
-
-```
-│          │
-│          │
-│        ##│
-└──────────┘
- 0123456789
-```
-
-Therefore, the output row for this sequence is “1”.
-
-### Example 2
-
-A line in the input file contains `T1,Z3,I4`.
-
-```
-
-     │          │       │          │       │    ####  │
-  T1 │          │  Z3   │   ##     │  I4   │   ##     │
-     │ ###      │  ──►  │ #####    │  ──►  │ #####    │
-     │  #       │       │  #       │       │  #       │
-     └──────────┘       └──────────┘       └──────────┘
-      0123456789         0123456789         0123456789
-
-```
-
-No rows are filled, so the output for this sequence is “4”.
-
-## Evaluation criteria
-
-The solution will be evaluated on the following criteria:
-
-- **Correctness**: does the program produce the correct output
-- **Clarity**: how easy it is for others to understand and work with your code
-- **Extensibility**: how easy would it be to extend your program with additional functionality, e.g. additional movement, new pieces, etc.
-- **Algorithmic complexity**: how does the performance of the submission scale with
-  regards to its input
-- **Efficiency**: how efficient is the solution. Our test suite includes test cases that might not fit entirely into memory. The solution is expected to handle multi-gigabyte inputs without running itself out of memory.
+# 8.TestFiles
+# tests/input.txt: test data encord provided
+# tests/output_answer.txt: test data answer I provided
+# tests/custom_input.txt:  custom test data I provided
+# tests/custom_output.txt: custom test answer I provided

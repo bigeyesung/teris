@@ -1,0 +1,5 @@
+kaleido
+plotly
+pyinstaller
+numpy
+pandas
