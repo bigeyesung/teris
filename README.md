@@ -66,7 +66,7 @@
 
 # 7-3.[Algorithm] 
 ### In general rule of thumb, current algorithm is that for each brick to find empty space. In terms of scalibility, I think it can be improved. One potential solution is to use multi-processing more(which I have use in one place) or distributed system to accelerate game.
-### The other idea is to use collision approach, one thing I would like to try is to use "AABB" tree collision. It is used for 2D space traversal. If we have many bricks and large tetris game, searching location would also be time-consuming. So better use other tree/ data scructures to help program run faster.
+### The other idea is to use collision approach, one thing I would like to try is to use "AABB" tree collision. It is used for 2D space traversal. Considering many bricks and large tetris games, searching location would also be time-consuming. So it is better use other tree/ data scructures to help program running faster.
 
 
 # 8.TestFiles
